@@ -1,0 +1,350 @@
+{% load static %}
+{% load sass_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Veracia</title>
+   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+   <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+   <link href="{% sass_src 'scss/index.scss' %}" rel="stylesheet" type="text/css" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;1,500&display=swap" rel="stylesheet">	
+
+   {% block css %}
+   {% endblock %}
+   <style>
+      div.analyzer-card
+      {
+         transition: all 0.2s ease-in-out;
+         cursor: pointer;
+         min-height: 195px;
+      }
+      div.analyzer-card:hover
+      {
+         transform: scale(1.03);
+      }
+      div#noticia_completa_wrapper
+      {
+         z-index: 998;
+         width: 100%;
+         height: 100%;
+         position: absolute;
+         cursor: pointer;
+         /* background-color: red; */
+      }
+      div#noticia_completa
+      {
+         box-shadow: rgba(0,0,0,0.3) 4px 4px 10px 5px;
+         background-color: white;
+         border-radius: 10px;
+         width: 90%;
+         height: 90%;
+         left: 5%;
+         z-index: 999;
+         position: absolute;
+      }
+      button#analyze:active
+      {
+         transform: scale(0.9);
+      }
+      button#analyze:hover
+      {
+         & > img
+         {
+            filter: invert(100%) sepia(100%) saturate(3207%) hue-rotate(0deg) brightness(10000%) contrast(10000%);
+         }
+      }
+      .dropdown
+      {
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        z-index: 10000;
+      }
+      .dropdown:hover>.dropdown-menu {
+         display: block;
+         position: absolute;
+         margin-bottom: -2px;
+      }
+      .dropdown:active>.dropdown-menu {
+         display: block;
+         position: absolute;
+      }
+      .dropdown>.dropdown-toggle:active {
+          pointer-events: none;
+      }
+      .dropdown-menu
+      {
+         margin-top: -2px;
+         bottom: 40px;
+         width: fit-content;
+      }
+      .dropdown-item
+      {
+         cursor: pointer;
+      }
+      #arrow
+      {
+         transition: all 0.16s ease-in-out;
+         cursor: pointer;
+      }
+      #arrow:hover
+      {
+         transform: scale(1.2);
+      }
+      #arrow:active
+      {
+         transform: scale(1.11);
+      }
+      #arrow.up
+      {
+         transform: rotateX(180deg);
+         cursor: pointer;
+      }
+      #arrow.up:hover
+      {
+         transform: rotateX(180deg) scale(1.2);
+      }
+      #arrow.up:active
+      {
+         transform: rotateX(180deg) scale(1.12);
+      }
+      #input_noticia
+      {
+         border-radius: 100px;
+         height: 65px;
+         padding-left: 15px;
+         padding-top: 20px;
+         outline: none;
+         max-width: 688px;
+         transition: all 0.2s ease-in-out;
+         border-color: rgba(0,0,0,0.3);
+         border-width: 2px;
+      }
+      #input_noticia.expanded
+      {
+         border-radius: 7px;
+         height: max-content;
+         min-height: 250px;
+         padding-left: 7px;
+         padding-top: 10px;
+         outline: none;
+         max-width: 800px;
+         border-color: rgba(0,0,0,0.3);
+         border-width: 2px;
+      }
+      .container-about
+      {
+          background-color: rgb(248,250,252);
+          margin-top: 5px;
+      }
+      .paso
+      {
+          background-color: white;
+          border-radius: 15px;
+          box-shadow: 0px 0px 3px 0.5px rgba(0,0,0,0.13);
+          min-height: 50px;
+          padding: 10px;
+          margin-bottom: 30px;
+          transition: all 0.17s ease-in-out;
+      }
+      .paso:hover
+      {
+          transform: scale(1.03);
+      }
+      .texto
+      {
+          font-family: 'Ubuntu', sans-serif;
+          font-size: 19px;
+      }
+      .contador
+      {
+          background-color: rgb(238,242,255);
+          color: rgb(106,109,242);
+          width: 40px;
+          height: 40px;
+          border-radius: 100px;
+      }
+      .imagen
+      {
+          margin-top: 20px;
+      }
+      #manual
+      {
+          margin-top: 15px;  
+      }
+      #noticia_body
+    	{
+			/* background-color: rgba(252,252,249,0.1); */
+			background-color: rgba(242,242,255,0.07);
+        	font-family: 'Saira', sans-serif;
+        	font-size: larger;
+        	text-align: justify;
+        	text-overflow: ellipsis;
+			word-wrap: break-word;
+         max-height: 730px;
+         overflow-y: auto;
+    	}
+		span.relevante
+      {
+         scroll-margin-top: 20px;
+         background-color: rgb(255,244,204);
+			border-radius: 6px;
+			padding-left: 5px;
+			padding-right: 5px;
+			cursor: default;
+			transition: all 0.0s ease-in-out;
+      }
+		span.relevante:hover
+		{
+			font-size: 21px;
+		}
+		span.patron, span.patron_contradiccion
+		{
+			color:#0000;
+			font-style: italic;
+			background:
+				linear-gradient(-90deg,var(--cursor) 5px,#0000 0) 10px 0, /*COLOR CURSOR*/
+		    	linear-gradient(var(--font) 0 0) 0 0; /*COLOR TEXTO*/
+			background-size: calc(var(--n)*1ch) 200%;
+			-webkit-background-clip: padding-box,text;
+			background-clip: padding-box,text;
+			background-repeat: no-repeat;
+			animation:
+				b .7s infinite steps(1),
+				t calc(var(--n)*.025s) steps(var(--n)) forwards;
+		}
+		@keyframes t
+		{
+  			from {background-size:0 200%}
+		}
+		@keyframes b
+		{
+  			50% {background-position:0 -100%,0 0}
+		}
+      #indice_btn
+      {
+         scroll-margin-top: -20px;
+      }
+      #pdf:hover
+      {
+         cursor: pointer;
+      }
+   </style>
+</head>
+<body>
+   <div class="site-container">
+      <div class="content-container">
+         <div class="container-navbar">
+            <img src="../../static/img/veracia.png" style="height: 50px;">
+            <div class="navbar-menus">
+               <ul>
+                  <li>
+                     <a href="{% url 'core:index' %}">Inicio</a>
+                  </li>
+                  <li>
+                     <a href="{% url 'core:analyzer' %}">Noticias populares</a>
+                  </li>
+                  <!--<li>
+                     <a href="{% url 'core:index' %}">Contacto</a>
+                  </li>-->
+                  <li>
+                     <a href="{% url 'core:about' %}">Acerca de</a>
+                  </li>
+               </ul>
+            </div>
+
+            <img src="../../static/img/sep.png"     style="height: 50px; margin-right: 5px;">
+            <img src="../../static/img/tecnm.png"   style="height: 50px; margin-right: 12px;">
+            <img src="../../static/img/cenidet.png" style="height: 50px;">
+         </div>
+         <div class="container-title">
+            <p>
+               {% block title %}
+               {% endblock %}
+            </p>
+         </div>
+         {% block content %}
+         {% endblock %}
+      </div>
+   </div>
+
+   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   <script>
+      var index_patron= 0, cantidad_patrones = 0;
+      $('body').on('click', 'button#analyze', function(){$(this).css('background-color', 'rgb(44,85,210)')});
+      $('body').on('click', '#btn_cerrar_noticia', function(){$('#noticia_completa_wrapper').hide(200)});
+      $('body').on('click', '#noticia_completa_wrapper', function(){$(this).hide(200)});
+      $('body').on('click', 'div.analyzer-card', function()
+      {
+         const src = $(this).find('img').attr('src');
+         $('#img_fondo').css("background-image", "linear-gradient(rgba(32,33,36,0) 36%,rgba(32,33,36,0.665)), url('" + src +"')");
+         $('#titulo_noticia').text($(this, 'span.title').text());
+         $('#cuerpo_noticia').text($(this).data('txt'));
+
+         $('#cuerpo_noticia').append('<br><br><h4>Bibliografía</h4>');
+         for (let i of $(this).data('fuentes'))
+         {
+            $('#cuerpo_noticia').append('<div><a href="'+i+'" target="_blank">'+i+'</a><div>');
+         }
+         $('#noticia_completa_wrapper').show(200);
+      });
+      $('#noticia_completa_wrapper').hide();
+
+
+      $('#noticia_pop1').data('fuentes', ['https://us.as.com/us/2020/04/19/tikitakas/1587319585_908420.html','https://www.sandiegouniontribune.com/en-espanol/vida-latina/articulo/2020-04-24/el-beber-alcohol-puede-aumentar-el-riesgo-de-contagiarnos-de-coronavirus','https://pnsd.sanidad.gob.es/noticiasEventos/actualidad/2020_Coronavirus/pdf/20200514_RECOMENDACIONES_COVID-19_ALCOHOL_.pdf','https://www.aarp.org/espanol/salud/vida-saludable/info-2020/consumo-alcohol-eleva-riesgo-de-coronavirus.html','https://www.diariomedico.com/opinion/jose-ramon-zarate/el-alcohol-es-muy-bueno-para-eliminar-la-covid-19.html','https://www.paho.org/es/noticias/14-4-2020-alcohol-no-protege-contra-covid-19-su-acceso-debe-limitarse-durante-aislamiento']);
+      $('#noticia_pop1').data('txt', `El consumo de alcohol no mata el coronavirus. De hecho, el alcohol no protege contra la COVID-19 y su acceso debe limitarse durante el aislamiento.El consumo de cualquier tipo de alcohol conlleva riesgos para la salud, y el consumo de alcohol etílico de alta concentración, especialmente si ha sido adulterado con metanol, puede tener graves consecuencias para la salud, incluida la muerte.El alcohol compromete el sistema inmunológico del cuerpo y aumenta el riesgo de resultados adversos para la salud, incluida la COVID-19.La Organización Mundial de la Salud (OMS) advierte que tomar bebidas alcohólicas aumenta la vulnerabilidad al coronavirus y sugiere la restricción del acceso al alcohol durante la pandemia.El consumo de alcohol, sobre todo si es excesivo, debilita el sistema inmunitario y reduce la capacidad para hacer frente a las enfermedades infecciosas.Además, el consumo de alcohol está asociado con una variedad de enfermedades transmisibles y no transmisibles y con trastornos de salud mental, lo que puede hacer que una persona sea vulnerable a una serie de enfermedades, incluida la COVID-19.Por lo tanto, las personas deben minimizar su consumo de alcohol en cualquier momento, y en particular durante la pandemia de COVID-19.Mejor aún, se recomienda evitar el alcohol por completo para no debilitar el sistema inmunológico y no arriesgar la salud de los demás.`);
+
+      $('#noticia_pop2').data('fuentes', ['https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/ways-people-get-hiv.html','https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/body-fluids.html','https://espanol.nichd.nih.gov/salud/temas/hiv/informacion/contagia','https://kidshealth.org/es/teens/aids.html','https://kidshealth.org/es/parents/hiv.html','https://www.argentina.gob.ar/salud/vih-sida/comosetrasmite']);
+      $('#noticia_pop2').data('txt', `No es cierto que el sida se contagie tocando a una persona infectada. El VIH, virus que causa el sida, se transmite a través de ciertos líquidos corporales, como la sangre, el semen, el líquido preseminal, las secreciones vaginales, los fluidos rectales y la leche materna. Para que ocurra la transmisión, estos líquidos deben entrar en contacto con una membrana mucosa o un tejido lesionado o inyectarse directamente en el torrente sanguíneo (por una aguja o jeringa). El VIH no se transmite por contacto casual, como dar la mano, compartir utensilios para comer o beber, o compartir baños.`);
+
+      $('#noticia_pop3').data('fuentes', ['https://www.doctoralia.com.mx/preguntas-respuestas/puede-haber-algun-contagio-de-vih-si-utilizas-un-rastrillo-para-afeitar-totalmente-seco-de-una-persona','https://1doc3.com/web/ver/606854/si-una-persona-con-vih-comparte-un-rastrillo-despues-de-banarse-puede-contagiar','https://1doc3.com/web/ver/434644/el-vih-se-puede-contagiar-por-compartir-rastrillos-o-usar-jabones-al-banarse','https://www.elmundo.es/elmundosalud/2008/08/26/hsdudasypreguntas/1219774795.html','https://www.cruzroja.es/principal/documents/1855892/1857142/Informate_Trasmision_VIH.pdf/66c9e896-0066-8781-ef2a-8ad5c74aaf04','https://www.elmundo.es/elmundosalud/2009/07/08/hsdudasypreguntas/1247043252.html','https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/not-transmitted.html', 'https://www.thebody.com/article/riesgo-en-navaja-de-afeitar']);
+      $('#noticia_pop3').data('txt', `No hay evidencia que sugiera que compartir un rastrillo cause la transmisión del VIH. Según los Centros para el Control y la Prevención de Enfermedades (CDC), el VIH no se transmite a través del uso compartido de rastrillos o de otros artículos de cuidado personal, como peines o cepillos de dientes. Sin embargo, es importante tener en cuenta que compartir rastrillos puede aumentar el riesgo de otras infecciones, como la hepatitis B y C. Por lo tanto, se recomienda evitar compartir rastrillos y otros artículos de cuidado personal para prevenir la transmisión de cualquier infección.`);
+
+      $('#noticia_pop4').data('fuentes', ['https://www.glamour.mx/belleza/articulos/las-unas-de-acrilico-causan-cancer/13726', 'https://www.sopranoskin.com/ponerse-unas-postizas-o-gelish-puede-causar-cancer/','https://www.telemundo.com/shows/hoy-dia/salud/unas-en-gel-esto-es-lo-que-se-sabe-sobre-el-riesgo-de-cancer-rcna66998','https://cnnespanol.cnn.com/2023/01/25/secador-unas-manicura-gel-danos-adn-mutaciones-celulas-humanas-investigacion-trax/','https://www.eluniverso.com/larevista/salud/verdad-o-mito-las-unas-de-gel-pueden-causar-cancer-nota/','https://www.lanacion.com.ar/ciencia/una-herramienta-usada-para-hacer-manicuras-puede-danar-el-adn-y-causar-mutaciones-cancerigenas-nid27012023/']);
+      $('#noticia_pop4').data('txt', `Según varios estudios, el uso de uñas artificiales y manicuras en gel puede aumentar el riesgo de contraer diversas enfermedades como virus, hongos, alergias y en casos extremos, cáncer  .  La luz ultravioleta utilizada en las manicuras en gel es el factor que los investigadores han señalado como causante del cáncer.  Este tipo de emisiones UV pueden penetrar la piel y alterar nuestro organismo.  Estas luces son las mismas que se encuentran en las camas solares, por lo que nuestra piel es aún más vulnerable.  Sin embargo, la probabilidad de desarrollar cáncer por el uso de uñas artificiales es prácticamente nula.  Es importante tomar precauciones como utilizar protector solar en manos y dedos 30 minutos antes de la exposición a la lámpara y, si es posible, utilizar un guante que cubra los dedos y la mano pero que deje las uñas libres.  También se recomienda verificar que el lugar esté limpio.`);
+      
+      $('#noticia_pop5').data('fuentes', ['https://www.eurofarma.com.co/articulos/conoce-algunas-fake-news-sobre-salud', 'https://nutritionfacts.org/es/blog/es-la-vitamina-b17-una-cura-alternativa-efectiva-para-el-cancer/', 'https://factual.afp.com/la-vitamina-b17-cura-el-cancer-varios-estudios-demuestran-los-riesgos-asociados-este-suplemento-no', 'https://www.wnyurology.com/content.aspx?chunkiid=121604']);
+      $('#noticia_pop5').data('txt', `Primero que nada no exista la vitamina B17.
+      La afirmación de que el cáncer es una deficiencia de vitamina B17 no está respaldada por evidencia científica.
+      La sustancia conocida como vitamina B17 no es en realidad una vitamina, sino un compuesto llamado amigdalina, que se encuentra en las semillas de ciertas frutas como los albaricoques, los melocotones y las almendras amargas. El compuesto se puede extraer y vender como un derivado llamado laetrilo, que se ha comercializado con el nombre incorrecto de "vitamina B17".`);
+      
+      $('#noticia_pop6').data('fuentes', ['https://kidshealth.org/es/parents/autism-studies.html','https://www.cdc.gov/ncbddd/spanish/autism/topics.html','https://www.cigna.com/es-us/knowledge-center/hw/el-autismo-y-las-vacunas-ue4907','https://www.uintacounty.com/DocumentCenter/View/1148/vaccines-and-autism-spanish','https://www.bbc.com/mundo/noticias-40776371','http://www.scielo.org.pe/scielo.php?pid=S1728-59172007000100012&script=sci_arttext']);
+      $('#noticia_pop6').data('txt', `No existe una conexión entre las vacunas y el autismo. El autismo es un trastorno que afecta el cerebro y que hace que la comunicación y la interacción con otras personas sea más difícil. Las causas del autismo se desconocen, pero se cree que la genética, las diferencias en la anatomía cerebral y las sustancias tóxicas en el medio ambiente contribuyen al desarrollo de esta afección en los niños. La idea de que las vacunas desempeñan un papel en el desarrollo del autismo surgió a partir de un estudio publicado en 1998, pero desde entonces ha habido una gran cantidad de estudios científicos que han mostrado que no existe ninguna relación entre las vacunas, o cualquiera de sus ingredientes, y el autismo. Además, se comprobó que la investigación en que se basaba ese estudio era falsa, el médico que lo publicó perdió su titulación y la revista de medicina que lo publicó se retractó. A pesar de la gran cantidad de pruebas que existen sobre lo seguras y eficaces que son las vacunas, algunos padres siguen optando por no vacunar a sus hijos, lo que puede aumentar el riesgo de enfermedades prevenibles con vacunas.`);
+      
+      $('#noticia_pop7').data('fuentes', ['https://www.wnyurology.com/content.aspx?chunkiid=167450','https://www.bbc.com/mundo/noticias/2013/08/130828_mitos_medicos_artritis_crujir_dedos_finde','https://www.osperkins.com.ar/realmente-crujirse-los-dedos-da-artritis-es-bueno-o-es-malo/']);
+      $('#noticia_pop7').data('txt', `La creencia popular de que hacer crujir los nudillos causa artritis es falsa. Aunque algunos estudios han encontrado casos de personas que se tronan habitualmente los nudillos y llegaron a desarrollar osteoartritis u otros problemas articulares, la mayoría de los estudios no han encontrado una relación entre el hábito de crujir los nudillos y la artritis. La artritis es una enfermedad que afecta a las articulaciones y puede causar dolor, inflamación y rigidez. Los factores de riesgo para desarrollar artritis incluyen antecedentes familiares, edad, sexo, lesiones en las articulaciones y estilo de vida, como el tabaquismo y la obesidad. Aunque el crujido crónico de los nudillos puede conducir a una fuerza de agarre reducida y a posibles lesiones y dislocaciones de tendones, no hay evidencia de que cause artritis.`);
+      
+      $('#noticia_pop8').data('fuentes', ['https://www.euroresidentes.com/salud/ver-la-tele-demasiado-cerca-es-malo/','https://www.univision.com/explora/sentarse-cerca-de-la-tv-es-realmente-malo-para-la-salud','https://www.clinicabaviera.com/blog/afecta-ver-la-television-la-vista/','https://ocumed.es/problemas-vista-television/amp/','https://www.clinicastecnovision.es/ver-la-television-muy-de-cerca-puede-danarte-la-vista/']);
+      $('#noticia_pop8').data('txt', `La creencia de que sentarse demasiado cerca del televisor empeora la vista es un mito. No hay evidencia científica que demuestre que sentarse cerca de la televisión daña los ojos, aunque puede causar fatiga visual. Los niños pueden enfocar a distancias cortas sin cansancio ocular mejor que los adultos, por lo que es común que adquieran el hábito de sentarse muy cerca para ver la televisión. Sentarse cerca de la televisión no puede hacer que un niño sea miope, pero el hecho de que un niño habitualmente se siente cerca de la televisión sí que puede indicar que tiene miopía y que aún no ha sido diagnosticada. La idea de que sentarse demasiado cerca del televisor puede dañar nuestros ojos prevalece porque en la década de 1960, la compañía General Electric vendió algunos aparatos de televisión a color que emitían cantidades excesivas de radiación por un error de fabricación. Por esto recomendó mantener a los niños a una distancia segura.`);
+
+      $('#noticia_pop9').data('fuentes', ['https://www.healthline.com/health/es/remedios-para-el-dolor-de-garganta','https://www.cdc.gov/ncbddd/spanish/autism/topics.html','https://kidshealth.org/es/parents/autism-studies.html','https://www.bbc.com/mundo/noticias-40776371']);
+      $('#noticia_pop9').data('txt', `El jugo de arándano no cura las infecciones del tracto urinario, aunque puede ayudar a prevenirlas. Los arándanos contienen compuestos llamados proantocianidinas, que pueden evitar que las bacterias se adhieran a las paredes de la vejiga y las vías urinarias. Sin embargo, el jugo de arándano no es un tratamiento efectivo para las infecciones del tracto urinario activas. Si una persona tiene una infección del tracto urinario, es importante que consulte a un médico para recibir tratamiento con antibióticos. Además, beber jugo de arándano en grandes cantidades puede causar efectos secundarios, como diarrea y dolor de estómago. El jugo de arándano no cura las infecciones del tracto urinario, pero puede ayudar a prevenirlas. Si una persona tiene una infección del tracto urinario, es importante que consulte a un médico para recibir tratamiento con antibióticos.`);
+
+      $('#noticia_pop10').data('fuentes', ['https://www.bbc.com/mundo/noticias/2013/06/130621_mitos_medicos_esperar_comer_nadar_finde','https://www.wnyurology.com/content.aspx?chunkiid=167466','https://www.clikisalud.net/nadar-despues-de-comer-realmente-peligroso/']);
+      $('#noticia_pop10').data('txt', `No hay un consenso claro sobre cuánto tiempo se debe esperar después de comer para nadar, pero la mayoría de los expertos recomiendan esperar al menos una hora. Esto se debe a que después de comer, el cuerpo dirige la mayor parte de su energía al proceso de digestión, lo que puede hacer que la natación sea más difícil y aumentar el riesgo de calambres y otros problemas. Además, nadar con el estómago lleno puede provocar náuseas y malestar estomacal. Si se va a nadar después de comer, se recomienda hacer una comida ligera y esperar al menos una hora antes de entrar en el agua.`);
+
+      $('#noticia_pop11').data('fuentes', ['https://www.sabervivirtv.com/medicina-general/harvard-confirma-correr-no-es-malo-rodillas_3496','https://drtorrestrejo.com/correr-es-malo-para-las-rodillas/','https://www.runnersworld.com/es/salud-lesiones-runner/a32739279/correr-malo-rodillas/','https://www.runnea.com/articulos/running-news/2022/04/cierto-correr-malo-para-rodillas-11165/']);
+      $('#noticia_pop11').data('txt', `La creencia de que correr perjudica las rodillas es un mito. De hecho, varios estudios han demostrado que correr puede ser beneficioso para la salud articular y reducir las posibilidades de sufrir osteoartritis en la rodilla. Aunque las lesiones en las rodillas son comunes entre los corredores, la mayoría de ellas son causadas por el uso excesivo y el estrés acumulativo en una parte determinada del cuerpo. Correr con moderación y de manera adecuada no perjudica la articulación de la rodilla o la cadera, sino que fortalece el hueso y previene la osteoporosis. Además, correr puede estimular la regeneración del cartílago de la rodilla. Es importante recordar que si se siente dolor en la rodilla al correr, se debe buscar ayuda y orientación contactando con un fisioterapeuta o con otro tipo de profesional de la salud.`);
+
+      $('#noticia_pop12').data('fuentes', ['https://www.elsevier.es/es-revista-offarm-4-articulo-cuidado-tratamiento-del-resfriado-13054399','https://medlineplus.gov/spanish/ency/article/000678.htm','https://medicoplus.com/medicina-general/tipos-resfriados','https://www.mayoclinic.org/es/diseases-conditions/common-cold/symptoms-causes/syc-20351605']);
+      $('#noticia_pop12').data('txt', `La creencia de que el aire frío causa resfriados es un mito. Los resfriados son causados por virus, no por el clima. Los virus del resfriado se propagan a través de gotitas en el aire cuando alguien que está enfermo tose, estornuda o habla. El frío no causa resfriados, pero puede debilitar el sistema inmunológico y hacer que sea más fácil contraer un resfriado. Además, en invierno, las personas tienden a pasar más tiempo en interiores, lo que aumenta la exposición a los virus del resfriado. El aire frío no causa resfriados, pero puede debilitar el sistema inmunológico y hacer que sea más fácil contraer un resfriado. Los resfriados son causados por virus que se propagan a través de gotitas en el aire cuando alguien que está enfermo tose, estornuda o habla.`);
+
+
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+   {% block js %}
+   {% endblock %}
+</body>
+</html>

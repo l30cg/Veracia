@@ -1,0 +1,556 @@
+@import "variables";
+@import "mixins";
+
+html {
+  @include box-sizing(border-box);
+}
+
+*, *:after, *:before {
+  position: relative;
+  @include box-sizing(inherit);
+}
+
+body {
+  position: relative;
+  font-family: $main_font;
+  font-size: 16px;
+  @include default-container(100%, 100%);
+}
+
+.site-container {
+  min-height: 100% !important;
+  @include default-container(100%, 100%);
+  @include flex(row, flex-start, center);
+  .sidebar-container {
+    background: $black;
+    min-height: 100%;
+    width: 220px !important;
+    min-width: 220px !important;
+    @include default-container(220px, 100vh);
+    ul {
+      @include clear-margin-padding;
+      li {
+        padding: 20px;
+        a {
+          @include flex(row, center, left);
+          @include clear-margin-padding;
+          position: relative;
+          text-decoration: none;
+          width: 100%;
+          transition: 0.2s;
+          color: $white;
+          &.active {
+            color: $yellow;
+          }
+          &:hover::before {
+            @include default-container(100%, 2px);
+          }
+          &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: $white;
+            width: 0%;
+            border-radius: 20px;
+            transition: 0.2s;
+            @include default-container(0%, 2px);
+            @include clear-margin-padding;
+          }
+          span {
+            display: block;
+            font-weight: bold;
+            transition: 0.2s;
+            @include default-container;
+            @include clear-margin-padding;
+          }
+          i {
+            margin-right: 12px;
+            transition: 0.2s;
+            min-width: 27px;
+          }
+        }
+      }
+    }
+  }
+  .content-container {
+    @include default-container(calc(100% - 0px), 100vh);
+    .container-navbar {
+      padding-left: 12px;
+      padding-right: 12px;
+      background: rgb(27,57,106);
+      margin-bottom: 12px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+      @include flex(row, center, center);
+      .navbar-logo {
+        color: $white;
+        background: $black;
+        margin-right: 12px;
+        padding: 12px;
+        font-weight: bold;
+        font-size: 27px;
+        border-radius: 4px;
+        img {
+          width: 170px;
+          height: 70px;
+        }
+      }
+      .navbar-menus {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        @include default-container(100%, auto);
+        ul {
+          list-style: none;
+          padding: 12px;
+          @include clear-margin-padding;
+          @include flex(row, center, left);
+          li {
+            margin-right: 12px;
+            &:last-child {
+              margin-right: 0px;
+            }
+            a {
+              display: block;
+              color: $white;
+              padding: 9px 40px;
+              border-radius: 4px;
+              font-weight: bold;
+              text-decoration: none;
+              transition: 0.2s;
+              &:hover {
+                background: $blue-1;
+                color: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+    .container-title {
+      color: $black;
+      text-transform: uppercase;
+      text-align: center;
+      font-weight: bold;
+      font-size: 31px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+      margin-bottom: 12px;
+      p {
+        @include clear-margin-padding;
+      }
+    }
+    .container-carrousel {
+      @include default-container(100%, auto);
+      margin-bottom: 20px;
+      img {
+        width: 100%;
+        height: 260px;
+      }
+    }
+    .container-content {
+      /*
+        ###########
+        ## Index ##
+      */
+      .container-index {
+        @include default-container(100%, auto);
+        @include flex(row, flex-start, center);
+        .content-left {
+          min-height: 26rem;
+          margin-left: 20px;
+          overflow: hidden;
+          @include default-card(1);
+          .content-left-title {
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0,0,0,.7), 0 3px 1px -2px rgba(0,0,0,.6);
+            p {
+              font-weight: bold;
+              font-size: 20px;
+              @include clear-margin-padding;
+            }
+            background-color: rgb(30, 67, 126);
+            color: white;
+          }
+          .content-left-content {
+            padding: 20px;
+            min-width: 260px;
+            p {
+              @include clear-margin-padding;
+            }
+            textarea, input[type=text] {
+              resize: none;
+              @include default-container;
+            }
+            button {
+              display: block;
+              color: $blue-2;
+              background: $white;
+              padding: 12px 20px;
+              font-weight: bold;
+              text-transform: uppercase;
+              outline: none;
+              border: 2px solid $blue-2;
+              border-radius: 4px;
+              transition: 0.2s;
+              cursor: pointer;
+              @include default-container;
+              @include flex(row, center, center);
+              .content-left-content-analyze {
+                .text {
+                  &.d-none {
+                    display: none
+                  }
+                }
+                .loader {
+                  &.d-none {
+                    display: none
+                  }
+                }
+              }
+              &:hover {
+                color: $white;
+                background: $blue-2;
+              }
+            }
+          }
+        }
+        .content-middle {
+          margin-right: 20px;
+          .content-middle-graph {
+            padding: 12px;
+            margin-bottom: 20px;
+            @include default-card(1);
+            min-width: 260px;
+            p {
+              @include clear-margin-padding;
+            }
+          }
+          .content-middle-print {
+            padding: 12px;
+            margin-bottom: 20px;
+            @include default-card(1);
+            min-width: 260px;
+            a {
+              display: block;
+              @include default-container;
+              color: $blue-2;
+              background: $white;
+              padding: 12px 20px;
+              font-weight: bold;
+              text-align: center;
+              text-transform: uppercase;
+              outline: none;
+              border: 2px solid $blue-2;
+              border-radius: 4px;
+              transition: 0.2s;
+              cursor: pointer;
+              &:hover {
+                color: $white;
+                background: $blue-2;
+              }
+            }
+          }
+          .content-middle-data.bg-blue {
+            background: rgba(231,242,255,0.54);
+          }
+          .content-middle-data {
+            padding: 12px;
+            margin-bottom: 20px;
+            @include default-card(1);
+            min-width: 260px;
+            .content-middle-data-item {
+              font-weight: bold;
+            }
+            p {
+              @include clear-margin-padding;
+            }
+          }
+        }
+        .content-right {
+          min-height: 26rem;
+          margin-bottom: 20px;
+          margin-right: 20px;
+          overflow: hidden;
+          @include default-card(0);
+          .content-right-title {
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0,0,0,.7), 0 3px 1px -2px rgba(0,0,0,.6);
+            p {
+              @include clear-margin-padding;
+              font-weight: bold;
+              font-size: 20px;
+            }
+            background-color: rgb(30, 67, 126);
+            color: white;
+          }
+          .content-right-content {
+            padding: 20px;
+            .title {
+              font-weight: bold;
+            }
+            // .body {
+            // }
+            p {
+              @include clear-margin-padding;
+            }
+            button {
+              @include default-container;
+              color: $blue-2;
+              background: $white;
+              padding: 12px 20px;
+              font-weight: bold;
+              text-transform: uppercase;
+              outline: none;
+              border: 2px solid $blue-2;
+              border-radius: 4px;
+              transition: 0.2s;
+              cursor: pointer;
+              &:hover {
+                color: $white;
+                background: $blue-2;
+              }
+            }
+          }
+        }
+      }
+      /*
+        ##############
+        ## Analyzer ##
+      */
+      .container-analyzer {
+        .analyzer-cards {
+          flex-wrap: wrap;
+          @include default-container(100%, auto);
+          @include flex(row, flex-start, left);
+          .analyzer-card {
+            width: calc(25% - 40px);
+            background: $white;
+            text-align: center;
+            margin: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+            .analyzer-card-image {
+              box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+              img {
+                width: 100% !important;
+                height: 70px !important;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+              }
+            }
+            .analyzer-card-content {
+              padding: 12px;
+              text-align: left;
+              span {
+                &.title {
+                  font-weight: bold;
+                  font-size: 17px;
+                }
+              }
+              p {
+                font-size: 15px;
+                @include clear-margin-padding;
+              }
+            }
+          }
+        }
+      }
+      /*
+        ###########
+        ## About ##
+      */
+      .container-about {
+        @include default-container(100%, auto);
+        .about-items {
+          .about-item {
+            padding: 20px;
+            color: $black;
+            box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+            .about-item-title {
+              font-weight: bold;
+              font-size: 22px;
+            }
+            .about-item-description {
+              font-size: 17px;
+            }
+            &:first-child {
+              box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+            }
+            &:not(last-child) {
+              margin-bottom: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.loader {
+  width: 30px;
+  height: 30px;
+  background-color: rgb(44,85,210);
+  // border: 5px solid $blue-1;
+  border: 4px solid white;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  // display: inline-block;
+  position: absolute;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .site-container {
+    .content-container {
+      .container-content {
+        .container-index {
+          padding: 0px 20px;
+          @include default-container(100%, auto);
+          @include flex(column, flex-start, center);
+          flex-direction: column;
+          .content-left {
+            margin-left: 0px;
+            padding: 20px 0px;
+            @include default-container(100%, auto);
+          }
+          .content-middle {
+            padding: 20px 0px;
+            @include default-container(100%, auto);
+            .content-middle-graph {
+              @include default-container(100%, auto);
+            }
+            .content-middle-data {
+              @include default-container(100%, auto);
+            }
+            .content-middle-buttons {
+              display: block;
+              text-align: center;
+            }
+          }
+          .content-right {
+            padding: 20px 0px;
+            @include default-container(100%, auto);
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1225px) {
+  .site-container {
+    @include flex(column, flex-start, center);
+    .sidebar-container {
+      width: 100% !important;
+      min-width: 100% !important;
+      @include default-container(100%, 100%);
+      ul {
+        li {
+          a {
+            &:before {
+            }
+          }
+        }
+      }
+    }
+    .content-container {
+      @include default-container(100%, 100%);
+      .container-navbar {
+        overflow-y: auto;
+        ul {
+          li {
+            a {
+            }
+          }
+        }
+      }
+      .container-carrousel {
+        img {
+        }
+      }
+      .container-content {
+        /*
+          ###########
+          ## Index ##
+        */
+        .container-index {
+          .content-left {
+            .content-left-title {
+              p {
+              }
+            }
+            .content-left-content {
+              .content-left-content-analyze {
+                .text {
+                }
+                .loader {
+                }
+              }
+            }
+          }
+          .content-middle {
+            .content-middle-graph {
+              p {
+              }
+            }
+            .content-middle-data {
+              .content-middle-data-item {
+              }
+              p {
+              }
+            }
+            .content-middle-buttons {
+              button {
+              }
+            }
+          }
+          .content-right {
+            .content-right-title {
+              p {
+              }
+            }
+            .content-right-content {
+            }
+          }
+        }
+        /*
+          ##############
+          ## Analyzer ##
+        */
+        .container-analyzer {
+          .analyzer-title {
+            p {
+            }
+          }
+          .analyzer-cards {
+            .analyzer-card {
+              @include default-container(100%, 100%);
+              .analyzer-card-image {
+                img {
+                }
+              }
+              .analyzer-card-content {
+                span {
+                  &.title {
+                  }
+                }
+                p {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

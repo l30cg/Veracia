@@ -1,0 +1,631 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Veracia</title>
+   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+   <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+   <link href="/static/scss/index.css" rel="stylesheet" type="text/css" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;1,500&display=swap" rel="stylesheet">	
+
+   
+
+   <style>
+      div.analyzer-card
+      {
+         transition: all 0.2s ease-in-out;
+         cursor: pointer;
+         min-height: 195px;
+      }
+      div.analyzer-card:hover
+      {
+         transform: scale(1.03);
+      }
+      div#noticia_completa_wrapper
+      {
+         z-index: 998;
+         width: 100%;
+         height: 100%;
+         position: absolute;
+         cursor: pointer;
+         /* background-color: red; */
+      }
+      div#noticia_completa
+      {
+         box-shadow: rgba(0,0,0,0.3) 4px 4px 10px 5px;
+         background-color: white;
+         border-radius: 10px;
+         width: 90%;
+         height: 90%;
+         left: 5%;
+         z-index: 999;
+         position: absolute;
+      }
+      button#analyze:active
+      {
+         transform: scale(0.9);
+      }
+      button#analyze:hover
+      {
+         & > img
+         {
+            filter: invert(100%) sepia(100%) saturate(3207%) hue-rotate(0deg) brightness(10000%) contrast(10000%);
+         }
+      }
+      .dropdown
+      {
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        z-index: 10000;
+      }
+      .dropdown:hover>.dropdown-menu {
+         display: block;
+         position: absolute;
+         margin-bottom: -2px;
+      }
+      .dropdown:active>.dropdown-menu {
+         display: block;
+         position: absolute;
+      }
+      .dropdown>.dropdown-toggle:active {
+          pointer-events: none;
+      }
+      .dropdown-menu
+      {
+         margin-top: -2px;
+         bottom: 40px;
+         width: fit-content;
+      }
+      .dropdown-item
+      {
+         cursor: pointer;
+      }
+      #arrow
+      {
+         transition: all 0.16s ease-in-out;
+         cursor: pointer;
+      }
+      #arrow:hover
+      {
+         transform: scale(1.2);
+      }
+      #arrow:active
+      {
+         transform: scale(1.11);
+      }
+      #arrow.up
+      {
+         transform: rotateX(180deg);
+         cursor: pointer;
+      }
+      #arrow.up:hover
+      {
+         transform: rotateX(180deg) scale(1.2);
+      }
+      #arrow.up:active
+      {
+         transform: rotateX(180deg) scale(1.12);
+      }
+      #input_noticia
+      {
+         border-radius: 100px;
+         height: 65px;
+         padding-left: 15px;
+         padding-top: 20px;
+         outline: none;
+         max-width: 688px;
+         transition: all 0.2s ease-in-out;
+         border-color: rgba(0,0,0,0.3);
+         border-width: 2px;
+      }
+      #input_noticia.expanded
+      {
+         border-radius: 7px;
+         height: max-content;
+         min-height: 250px;
+         padding-left: 7px;
+         padding-top: 10px;
+         outline: none;
+         max-width: 800px;
+         border-color: rgba(0,0,0,0.3);
+         border-width: 2px;
+      }
+      .container-about
+      {
+          background-color: rgb(248,250,252);
+          margin-top: 5px;
+      }
+      .paso
+      {
+          background-color: white;
+          border-radius: 15px;
+          box-shadow: 0px 0px 3px 0.5px rgba(0,0,0,0.13);
+          min-height: 50px;
+          padding: 10px;
+          margin-bottom: 30px;
+          transition: all 0.17s ease-in-out;
+      }
+      .paso:hover
+      {
+          transform: scale(1.03);
+      }
+      .texto
+      {
+          font-family: 'Ubuntu', sans-serif;
+          font-size: 19px;
+      }
+      .contador
+      {
+          background-color: rgb(238,242,255);
+          color: rgb(106,109,242);
+          width: 40px;
+          height: 40px;
+          border-radius: 100px;
+      }
+      .imagen
+      {
+          margin-top: 20px;
+      }
+      #manual
+      {
+          margin-top: 15px;  
+      }
+      #noticia_body
+    	{
+			/* background-color: rgba(252,252,249,0.1); */
+			background-color: rgba(242,242,255,0.07);
+        	font-family: 'Saira', sans-serif;
+        	font-size: larger;
+        	text-align: justify;
+        	text-overflow: ellipsis;
+			word-wrap: break-word;
+         max-height: 730px;
+         overflow-y: auto;
+    	}
+		span.relevante
+      {
+         scroll-margin-top: 20px;
+         background-color: rgb(255,244,204);
+			border-radius: 6px;
+			padding-left: 5px;
+			padding-right: 5px;
+			cursor: default;
+			transition: all 0.0s ease-in-out;
+      }
+		span.relevante:hover
+		{
+			font-size: 21px;
+		}
+		span.patron, span.patron_contradiccion
+		{
+			color:#0000;
+			font-style: italic;
+			background:
+				linear-gradient(-90deg,var(--cursor) 5px,#0000 0) 10px 0, /*COLOR CURSOR*/
+		    	linear-gradient(var(--font) 0 0) 0 0; /*COLOR TEXTO*/
+			background-size: calc(var(--n)*1ch) 200%;
+			-webkit-background-clip: padding-box,text;
+			background-clip: padding-box,text;
+			background-repeat: no-repeat;
+			animation:
+				b .7s infinite steps(1),
+				t calc(var(--n)*.025s) steps(var(--n)) forwards;
+		}
+		@keyframes t
+		{
+  			from {background-size:0 200%}
+		}
+		@keyframes b
+		{
+  			50% {background-position:0 -100%,0 0}
+		}
+      #indice_btn
+      {
+         scroll-margin-top: -20px;
+      }
+      #pdf:hover
+      {
+         cursor: pointer;
+      }
+   </style>
+</head>
+<body>
+   <div class="site-container">
+      <div class="content-container">
+         <div class="container-navbar">
+            <img src="../../static/img/veracia.png" style="height: 50px;">
+            <div class="navbar-menus">
+               <ul>
+                  <li>
+                     <a href="/">Inicio</a>
+                  </li>
+                  <li>
+                     <a href="/analyzer/">Noticias populares</a>
+                  </li>
+                  <!--<li>
+                     <a href="/">Contacto</a>
+                  </li>-->
+                  <li>
+                     <a href="/about/">Acerca de</a>
+                  </li>
+               </ul>
+            </div>
+
+            <img src="../../static/img/sep.png"     style="height: 50px; margin-right: 5px;">
+            <img src="../../static/img/tecnm.png"   style="height: 50px; margin-right: 12px;">
+            <img src="../../static/img/cenidet.png" style="height: 50px;">
+         </div>
+         <div class="container-title">
+            <p>
+               
+   Inicio
+
+            </p>
+         </div>
+         
+   <div class="container-carrousel">
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+         <ol class="carousel-indicators">
+         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+         </ol>
+         <div class="carousel-inner">
+         <div class="carousel-item active">
+            <img src="/static/img/banner2.png" style="object-fit: fill;">
+         </div>
+         <!--<div class="carousel-item">
+            <img src="/static/img/carrousel2.jpg">
+         </div>
+         <div class="carousel-item">
+            <img src="/static/img/carrousel3.jpg">
+         </div>-->
+         </div>
+         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+         <span class="sr-only">Previous</span>
+         </a>
+         <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+         <span class="sr-only">Next</span>
+         </a>
+      </div>
+   </div>
+   <div class="container-content">
+      
+      <div class="dropdown" id="indice_btn">
+         <button
+           class="btn btn-primary dropdown-toggle"
+           type="button"
+           id="dropdownMenuButton"
+           data-mdb-toggle="dropdown"
+           aria-expanded="false"
+         >
+           Índice
+         </button>
+         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            
+            <li><a class="dropdown-item" data-index="0">Noticia 1</a></li>
+            
+         </ul>
+      </div>
+      
+
+
+
+
+      <form method="POST" class="container-index">
+         <div class="content-left" style="width: 80%;">
+            <input type="hidden" name="csrfmiddlewaretoken" value="bCG9A3pqbEtv3wBcx8HyCxaC6s6qPF0CKB3vZL0Z8ERdTvB7uHPkXD60CJ1qmza7">
+            <div class="content-left-title">
+               <p id="inicio">Noticia</p>
+            </div>
+            <div id="container" class="content-left-content" style="margin-top: 20px; margin-bottom: 20px;">
+               <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                  <img id="arrow" src="../../static/img/arrow_down.png" style="object-fit: contain; width: 20.5px; height: 20.5px; margin-right: 8px;"/>
+
+                  <textarea id="input_noticia" name="text" cols="30" rows="10" placeholder="Ingresar noticia"></textarea>
+                  
+                  <button id="analyze" class="content-left-content-analyze" name="analyze" style="border-radius: 100px; width: 50px; height: 50px; right: 57px; top: 0px; margin: 0px;">
+                     <img src="../../static/img/lupa_azul.png" style="object-fit: contain; width: 20px; height: 20px;"/>
+                     <span id="loader" class="loader d-none"></span>
+                  </button>
+
+                  
+                     <a id="pdf" name="clean" style="margin-left: -30px;"><img src="../../static/img/descargar_pdf.png" style="object-fit: contain; width: 60px; height: 60px;"/></a>
+                  
+               </div>
+            </div>
+
+            
+            <div class="content-left-title" id="barra_art_capturados">
+               <p>Artículos capturados</p>
+            </div>
+            <div id="lista_noticias"></div>
+
+
+            <div class="content-left-title">
+               <p>Veredicto</p>
+            </div>
+            <div class="content-left-content">
+               <div class="content-middle">
+                  <div class="content-middle-data">
+                     <span class="content-middle-data-item">
+                        <table class="table">
+                           <tbody>
+                           
+                              
+                                 <tr>
+                                    <td>
+                                       
+
+                                       
+
+                                       • La noticia 1 menciona información Verdadera.
+                                    </td>
+                                 </tr>
+                              
+                           
+                           </tbody>
+                        </table>
+                     </span>
+                  </div>
+               </div>
+            </div>
+
+
+            <div class="content-left-title">
+               <p>Hechos detectados</p>
+            </div>
+            <div class="content-left-content">
+               <div class="content-middle">
+                  <div class="content-middle-data">
+                     <span class="content-middle-data-item">
+                        <table class="table">
+                           <thead style="background-color: rgb(30,67,126); color: white;">
+                             <tr>
+                              <th scope="col">Hecho en la noticia</th>
+                              <th scope="col">Nota</th>
+                              <th scope="col">Hechos en las notas relacionadas</th>
+                              <th scope="col">Resultado</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                             
+                               
+                                 <tr>
+                                    <td> La vacuna del covid-19 produce cáncer </td>
+                                    <td scope="row">1</td>
+                                    <td>Publicaciones afirman erróneamente que la vacuna de Moderna contiene una sustancia insegura | Factual</td>
+                                    <td>Confirmación</td>
+                                 </tr>
+                              
+                             
+                           </tbody>
+                         </table>
+                     </span>
+                  </div>
+               </div>
+            </div>
+            
+         </div>
+      </form>
+   </div>
+
+      </div>
+   </div>
+
+   <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   <script>
+      var index_patron= 0, cantidad_patrones = 0;
+      $('body').on('click', 'button#analyze', function(){$(this).css('background-color', 'rgb(44,85,210)')});
+      $('body').on('click', '#btn_cerrar_noticia', function(){$('#noticia_completa_wrapper').hide(200)});
+      $('body').on('click', '#noticia_completa_wrapper', function(){$(this).hide(200)});
+      $('body').on('click', 'div.analyzer-card', function()
+      {
+         const src = $(this).find('img').attr('src');
+         $('#img_fondo').css("background-image", "linear-gradient(rgba(32,33,36,0) 36%,rgba(32,33,36,0.665)), url('" + src +"')");
+         $('#titulo_noticia').text($(this, 'span.title').text());
+         $('#cuerpo_noticia').text($(this).data('txt'));
+
+         $('#cuerpo_noticia').append('<br><br><h4>Bibliografía</h4>');
+         for (let i of $(this).data('fuentes'))
+         {
+            $('#cuerpo_noticia').append('<div><a href="'+i+'" target="_blank">'+i+'</a><div>');
+         }
+         $('#noticia_completa_wrapper').show(200);
+      });
+      $('#noticia_completa_wrapper').hide();
+
+
+      $('#noticia_pop1').data('fuentes', ['https://us.as.com/us/2020/04/19/tikitakas/1587319585_908420.html','https://www.sandiegouniontribune.com/en-espanol/vida-latina/articulo/2020-04-24/el-beber-alcohol-puede-aumentar-el-riesgo-de-contagiarnos-de-coronavirus','https://pnsd.sanidad.gob.es/noticiasEventos/actualidad/2020_Coronavirus/pdf/20200514_RECOMENDACIONES_COVID-19_ALCOHOL_.pdf','https://www.aarp.org/espanol/salud/vida-saludable/info-2020/consumo-alcohol-eleva-riesgo-de-coronavirus.html','https://www.diariomedico.com/opinion/jose-ramon-zarate/el-alcohol-es-muy-bueno-para-eliminar-la-covid-19.html','https://www.paho.org/es/noticias/14-4-2020-alcohol-no-protege-contra-covid-19-su-acceso-debe-limitarse-durante-aislamiento']);
+      $('#noticia_pop1').data('txt', `El consumo de alcohol no mata el coronavirus. De hecho, el alcohol no protege contra la COVID-19 y su acceso debe limitarse durante el aislamiento.El consumo de cualquier tipo de alcohol conlleva riesgos para la salud, y el consumo de alcohol etílico de alta concentración, especialmente si ha sido adulterado con metanol, puede tener graves consecuencias para la salud, incluida la muerte.El alcohol compromete el sistema inmunológico del cuerpo y aumenta el riesgo de resultados adversos para la salud, incluida la COVID-19.La Organización Mundial de la Salud (OMS) advierte que tomar bebidas alcohólicas aumenta la vulnerabilidad al coronavirus y sugiere la restricción del acceso al alcohol durante la pandemia.El consumo de alcohol, sobre todo si es excesivo, debilita el sistema inmunitario y reduce la capacidad para hacer frente a las enfermedades infecciosas.Además, el consumo de alcohol está asociado con una variedad de enfermedades transmisibles y no transmisibles y con trastornos de salud mental, lo que puede hacer que una persona sea vulnerable a una serie de enfermedades, incluida la COVID-19.Por lo tanto, las personas deben minimizar su consumo de alcohol en cualquier momento, y en particular durante la pandemia de COVID-19.Mejor aún, se recomienda evitar el alcohol por completo para no debilitar el sistema inmunológico y no arriesgar la salud de los demás.`);
+
+      $('#noticia_pop2').data('fuentes', ['https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/ways-people-get-hiv.html','https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/body-fluids.html','https://espanol.nichd.nih.gov/salud/temas/hiv/informacion/contagia','https://kidshealth.org/es/teens/aids.html','https://kidshealth.org/es/parents/hiv.html','https://www.argentina.gob.ar/salud/vih-sida/comosetrasmite']);
+      $('#noticia_pop2').data('txt', `No es cierto que el sida se contagie tocando a una persona infectada. El VIH, virus que causa el sida, se transmite a través de ciertos líquidos corporales, como la sangre, el semen, el líquido preseminal, las secreciones vaginales, los fluidos rectales y la leche materna. Para que ocurra la transmisión, estos líquidos deben entrar en contacto con una membrana mucosa o un tejido lesionado o inyectarse directamente en el torrente sanguíneo (por una aguja o jeringa). El VIH no se transmite por contacto casual, como dar la mano, compartir utensilios para comer o beber, o compartir baños.`);
+
+      $('#noticia_pop3').data('fuentes', ['https://www.doctoralia.com.mx/preguntas-respuestas/puede-haber-algun-contagio-de-vih-si-utilizas-un-rastrillo-para-afeitar-totalmente-seco-de-una-persona','https://1doc3.com/web/ver/606854/si-una-persona-con-vih-comparte-un-rastrillo-despues-de-banarse-puede-contagiar','https://1doc3.com/web/ver/434644/el-vih-se-puede-contagiar-por-compartir-rastrillos-o-usar-jabones-al-banarse','https://www.elmundo.es/elmundosalud/2008/08/26/hsdudasypreguntas/1219774795.html','https://www.cruzroja.es/principal/documents/1855892/1857142/Informate_Trasmision_VIH.pdf/66c9e896-0066-8781-ef2a-8ad5c74aaf04','https://www.elmundo.es/elmundosalud/2009/07/08/hsdudasypreguntas/1247043252.html','https://www.cdc.gov/hiv/spanish/basics/hiv-transmission/not-transmitted.html', 'https://www.thebody.com/article/riesgo-en-navaja-de-afeitar']);
+      $('#noticia_pop3').data('txt', `No hay evidencia que sugiera que compartir un rastrillo cause la transmisión del VIH. Según los Centros para el Control y la Prevención de Enfermedades (CDC), el VIH no se transmite a través del uso compartido de rastrillos o de otros artículos de cuidado personal, como peines o cepillos de dientes. Sin embargo, es importante tener en cuenta que compartir rastrillos puede aumentar el riesgo de otras infecciones, como la hepatitis B y C. Por lo tanto, se recomienda evitar compartir rastrillos y otros artículos de cuidado personal para prevenir la transmisión de cualquier infección.`);
+
+      $('#noticia_pop4').data('fuentes', ['https://www.glamour.mx/belleza/articulos/las-unas-de-acrilico-causan-cancer/13726', 'https://www.sopranoskin.com/ponerse-unas-postizas-o-gelish-puede-causar-cancer/','https://www.telemundo.com/shows/hoy-dia/salud/unas-en-gel-esto-es-lo-que-se-sabe-sobre-el-riesgo-de-cancer-rcna66998','https://cnnespanol.cnn.com/2023/01/25/secador-unas-manicura-gel-danos-adn-mutaciones-celulas-humanas-investigacion-trax/','https://www.eluniverso.com/larevista/salud/verdad-o-mito-las-unas-de-gel-pueden-causar-cancer-nota/','https://www.lanacion.com.ar/ciencia/una-herramienta-usada-para-hacer-manicuras-puede-danar-el-adn-y-causar-mutaciones-cancerigenas-nid27012023/']);
+      $('#noticia_pop4').data('txt', `Según varios estudios, el uso de uñas artificiales y manicuras en gel puede aumentar el riesgo de contraer diversas enfermedades como virus, hongos, alergias y en casos extremos, cáncer  .  La luz ultravioleta utilizada en las manicuras en gel es el factor que los investigadores han señalado como causante del cáncer.  Este tipo de emisiones UV pueden penetrar la piel y alterar nuestro organismo.  Estas luces son las mismas que se encuentran en las camas solares, por lo que nuestra piel es aún más vulnerable.  Sin embargo, la probabilidad de desarrollar cáncer por el uso de uñas artificiales es prácticamente nula.  Es importante tomar precauciones como utilizar protector solar en manos y dedos 30 minutos antes de la exposición a la lámpara y, si es posible, utilizar un guante que cubra los dedos y la mano pero que deje las uñas libres.  También se recomienda verificar que el lugar esté limpio.`);
+      
+      $('#noticia_pop5').data('fuentes', ['https://www.eurofarma.com.co/articulos/conoce-algunas-fake-news-sobre-salud', 'https://nutritionfacts.org/es/blog/es-la-vitamina-b17-una-cura-alternativa-efectiva-para-el-cancer/', 'https://factual.afp.com/la-vitamina-b17-cura-el-cancer-varios-estudios-demuestran-los-riesgos-asociados-este-suplemento-no', 'https://www.wnyurology.com/content.aspx?chunkiid=121604']);
+      $('#noticia_pop5').data('txt', `Primero que nada no exista la vitamina B17.
+      La afirmación de que el cáncer es una deficiencia de vitamina B17 no está respaldada por evidencia científica.
+      La sustancia conocida como vitamina B17 no es en realidad una vitamina, sino un compuesto llamado amigdalina, que se encuentra en las semillas de ciertas frutas como los albaricoques, los melocotones y las almendras amargas. El compuesto se puede extraer y vender como un derivado llamado laetrilo, que se ha comercializado con el nombre incorrecto de "vitamina B17".`);
+      
+      $('#noticia_pop6').data('fuentes', ['https://kidshealth.org/es/parents/autism-studies.html','https://www.cdc.gov/ncbddd/spanish/autism/topics.html','https://www.cigna.com/es-us/knowledge-center/hw/el-autismo-y-las-vacunas-ue4907','https://www.uintacounty.com/DocumentCenter/View/1148/vaccines-and-autism-spanish','https://www.bbc.com/mundo/noticias-40776371','http://www.scielo.org.pe/scielo.php?pid=S1728-59172007000100012&script=sci_arttext']);
+      $('#noticia_pop6').data('txt', `No existe una conexión entre las vacunas y el autismo. El autismo es un trastorno que afecta el cerebro y que hace que la comunicación y la interacción con otras personas sea más difícil. Las causas del autismo se desconocen, pero se cree que la genética, las diferencias en la anatomía cerebral y las sustancias tóxicas en el medio ambiente contribuyen al desarrollo de esta afección en los niños. La idea de que las vacunas desempeñan un papel en el desarrollo del autismo surgió a partir de un estudio publicado en 1998, pero desde entonces ha habido una gran cantidad de estudios científicos que han mostrado que no existe ninguna relación entre las vacunas, o cualquiera de sus ingredientes, y el autismo. Además, se comprobó que la investigación en que se basaba ese estudio era falsa, el médico que lo publicó perdió su titulación y la revista de medicina que lo publicó se retractó. A pesar de la gran cantidad de pruebas que existen sobre lo seguras y eficaces que son las vacunas, algunos padres siguen optando por no vacunar a sus hijos, lo que puede aumentar el riesgo de enfermedades prevenibles con vacunas.`);
+      
+      $('#noticia_pop7').data('fuentes', ['https://www.wnyurology.com/content.aspx?chunkiid=167450','https://www.bbc.com/mundo/noticias/2013/08/130828_mitos_medicos_artritis_crujir_dedos_finde','https://www.osperkins.com.ar/realmente-crujirse-los-dedos-da-artritis-es-bueno-o-es-malo/']);
+      $('#noticia_pop7').data('txt', `La creencia popular de que hacer crujir los nudillos causa artritis es falsa. Aunque algunos estudios han encontrado casos de personas que se tronan habitualmente los nudillos y llegaron a desarrollar osteoartritis u otros problemas articulares, la mayoría de los estudios no han encontrado una relación entre el hábito de crujir los nudillos y la artritis. La artritis es una enfermedad que afecta a las articulaciones y puede causar dolor, inflamación y rigidez. Los factores de riesgo para desarrollar artritis incluyen antecedentes familiares, edad, sexo, lesiones en las articulaciones y estilo de vida, como el tabaquismo y la obesidad. Aunque el crujido crónico de los nudillos puede conducir a una fuerza de agarre reducida y a posibles lesiones y dislocaciones de tendones, no hay evidencia de que cause artritis.`);
+      
+      $('#noticia_pop8').data('fuentes', ['https://www.euroresidentes.com/salud/ver-la-tele-demasiado-cerca-es-malo/','https://www.univision.com/explora/sentarse-cerca-de-la-tv-es-realmente-malo-para-la-salud','https://www.clinicabaviera.com/blog/afecta-ver-la-television-la-vista/','https://ocumed.es/problemas-vista-television/amp/','https://www.clinicastecnovision.es/ver-la-television-muy-de-cerca-puede-danarte-la-vista/']);
+      $('#noticia_pop8').data('txt', `La creencia de que sentarse demasiado cerca del televisor empeora la vista es un mito. No hay evidencia científica que demuestre que sentarse cerca de la televisión daña los ojos, aunque puede causar fatiga visual. Los niños pueden enfocar a distancias cortas sin cansancio ocular mejor que los adultos, por lo que es común que adquieran el hábito de sentarse muy cerca para ver la televisión. Sentarse cerca de la televisión no puede hacer que un niño sea miope, pero el hecho de que un niño habitualmente se siente cerca de la televisión sí que puede indicar que tiene miopía y que aún no ha sido diagnosticada. La idea de que sentarse demasiado cerca del televisor puede dañar nuestros ojos prevalece porque en la década de 1960, la compañía General Electric vendió algunos aparatos de televisión a color que emitían cantidades excesivas de radiación por un error de fabricación. Por esto recomendó mantener a los niños a una distancia segura.`);
+
+      $('#noticia_pop9').data('fuentes', ['https://www.healthline.com/health/es/remedios-para-el-dolor-de-garganta','https://www.cdc.gov/ncbddd/spanish/autism/topics.html','https://kidshealth.org/es/parents/autism-studies.html','https://www.bbc.com/mundo/noticias-40776371']);
+      $('#noticia_pop9').data('txt', `El jugo de arándano no cura las infecciones del tracto urinario, aunque puede ayudar a prevenirlas. Los arándanos contienen compuestos llamados proantocianidinas, que pueden evitar que las bacterias se adhieran a las paredes de la vejiga y las vías urinarias. Sin embargo, el jugo de arándano no es un tratamiento efectivo para las infecciones del tracto urinario activas. Si una persona tiene una infección del tracto urinario, es importante que consulte a un médico para recibir tratamiento con antibióticos. Además, beber jugo de arándano en grandes cantidades puede causar efectos secundarios, como diarrea y dolor de estómago. El jugo de arándano no cura las infecciones del tracto urinario, pero puede ayudar a prevenirlas. Si una persona tiene una infección del tracto urinario, es importante que consulte a un médico para recibir tratamiento con antibióticos.`);
+
+      $('#noticia_pop10').data('fuentes', ['https://www.bbc.com/mundo/noticias/2013/06/130621_mitos_medicos_esperar_comer_nadar_finde','https://www.wnyurology.com/content.aspx?chunkiid=167466','https://www.clikisalud.net/nadar-despues-de-comer-realmente-peligroso/']);
+      $('#noticia_pop10').data('txt', `No hay un consenso claro sobre cuánto tiempo se debe esperar después de comer para nadar, pero la mayoría de los expertos recomiendan esperar al menos una hora. Esto se debe a que después de comer, el cuerpo dirige la mayor parte de su energía al proceso de digestión, lo que puede hacer que la natación sea más difícil y aumentar el riesgo de calambres y otros problemas. Además, nadar con el estómago lleno puede provocar náuseas y malestar estomacal. Si se va a nadar después de comer, se recomienda hacer una comida ligera y esperar al menos una hora antes de entrar en el agua.`);
+
+      $('#noticia_pop11').data('fuentes', ['https://www.sabervivirtv.com/medicina-general/harvard-confirma-correr-no-es-malo-rodillas_3496','https://drtorrestrejo.com/correr-es-malo-para-las-rodillas/','https://www.runnersworld.com/es/salud-lesiones-runner/a32739279/correr-malo-rodillas/','https://www.runnea.com/articulos/running-news/2022/04/cierto-correr-malo-para-rodillas-11165/']);
+      $('#noticia_pop11').data('txt', `La creencia de que correr perjudica las rodillas es un mito. De hecho, varios estudios han demostrado que correr puede ser beneficioso para la salud articular y reducir las posibilidades de sufrir osteoartritis en la rodilla. Aunque las lesiones en las rodillas son comunes entre los corredores, la mayoría de ellas son causadas por el uso excesivo y el estrés acumulativo en una parte determinada del cuerpo. Correr con moderación y de manera adecuada no perjudica la articulación de la rodilla o la cadera, sino que fortalece el hueso y previene la osteoporosis. Además, correr puede estimular la regeneración del cartílago de la rodilla. Es importante recordar que si se siente dolor en la rodilla al correr, se debe buscar ayuda y orientación contactando con un fisioterapeuta o con otro tipo de profesional de la salud.`);
+
+      $('#noticia_pop12').data('fuentes', ['https://www.elsevier.es/es-revista-offarm-4-articulo-cuidado-tratamiento-del-resfriado-13054399','https://medlineplus.gov/spanish/ency/article/000678.htm','https://medicoplus.com/medicina-general/tipos-resfriados','https://www.mayoclinic.org/es/diseases-conditions/common-cold/symptoms-causes/syc-20351605']);
+      $('#noticia_pop12').data('txt', `La creencia de que el aire frío causa resfriados es un mito. Los resfriados son causados por virus, no por el clima. Los virus del resfriado se propagan a través de gotitas en el aire cuando alguien que está enfermo tose, estornuda o habla. El frío no causa resfriados, pero puede debilitar el sistema inmunológico y hacer que sea más fácil contraer un resfriado. Además, en invierno, las personas tienden a pasar más tiempo en interiores, lo que aumenta la exposición a los virus del resfriado. El aire frío no causa resfriados, pero puede debilitar el sistema inmunológico y hacer que sea más fácil contraer un resfriado. Los resfriados son causados por virus que se propagan a través de gotitas en el aire cuando alguien que está enfermo tose, estornuda o habla.`);
+
+
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+   
+<script type="text/javascript">
+   const analyze = document.getElementById("analyze");
+   const loader  = document.getElementById("loader");
+
+   analyze.addEventListener("click", function(e)
+   {
+      loader.classList.remove("d-none");
+   });
+
+   $('#arrow').on('click', function()
+   {
+      $(this).toggleClass('up');
+      const input = $('#input_noticia');
+      input.toggleClass('expanded');
+      if (input.hasClass('expanded'))
+      {
+         input.attr('placeholder', 'Ingresar artículo');
+         $('#container').css('margin-top', '10px');
+      }
+      else
+      {
+         input.attr('placeholder', 'Buscar noticia');
+         $('#container').css('margin-top', '20px');
+      }
+   });
+</script>
+
+
+<script id="noticias" type="application/json">[{"index": 0, "name": "Noticia 1", "title": "Publicaciones afirman err\u00f3neamente que la vacuna de Moderna contiene una sustancia insegura | Factual", "body": "    Pasar al contenido principal \u003Cbr\u003E\n         Factual \u003Cbr\u003E\n           * \u003Cbr\u003E\n           * \u003Cbr\u003E\n       * P\u00e1gina principal \u003Cbr\u003E\n       * Sobre la AFP \u003Cbr\u003E\n       * C\u00f3mo trabajamos \u003Cbr\u003E\n       * Pr\u00e1cticas editoriales y deontol\u00f3gicas \u003Cbr\u003E\n       * Conozca al equipo \u003Cbr\u003E\n       * Curso en l\u00ednea \u003Cbr\u003E\n       * Contacto \u003Cbr\u003E\n       * Correcciones \u003Cbr\u003E\n       * Ofertas para medios / empresas \u003Cbr\u003E\n             IDIOMAS \u003Cbr\u003E\n           DESTACADOS \u003Cbr\u003E\n           REGIONES \u003Cbr\u003E\n           TEMAS \u003Cbr\u003E\n         * Elecciones Argentina 2023 \u003Cbr\u003E\n         * Elecciones Ecuador 2023 \u003Cbr\u003E\n         * Conflicto Israelo-Palestino \u003Cbr\u003E\n         * Clima \u003Cbr\u003E\n         * AM\u00c9RICA LATINA \u003Cbr\u003E\n         * EEUU Y CANAD\u00c1 \u003Cbr\u003E\n         * EUROPA \u003Cbr\u003E\n         * ASIA PAC\u00cdFICO \u003Cbr\u003E\n         * MEDIO ORIENTE \u003Cbr\u003E\n         * \u00c1FRICA \u003Cbr\u003E\n         * SALUD \u003Cbr\u003E\n         * MEDIO AMBIENTE \u003Cbr\u003E\n         * CIENCIA \u003Cbr\u003E\n         * POL\u00cdTICA \u003Cbr\u003E\n         * DEPORTES \u003Cbr\u003E\n   Viales de la vacuna de Moderna contra el covid-19 en Bridgeport, Connecticut, Estados Unidos, el 20 de abril de 2021 ( Joseph Prezioso / AFP ) \u003Cbr\u003E\u003Cbr\u003E\n\n   Publicaciones afirman err\u00f3neamente que la vacuna de Moderna contiene una sustancia insegura \u003Cbr\u003E\u003Cbr\u003E\n\n     AFP Francia, AFP Brasil, AFP Estados Unidos Facebook Twitter Email Publicado el mi\u00e9rcoles 30 junio 2021 a las 16:28 \u003Cbr\u003E\n   Copyright AFP 2017-2024. Todos los derechos reservados. \u003Cbr\u003E\u003Cbr\u003E\n\n  \u003Cspan class='relevante' id='patron0'\u003E Varias entradas compartidas decenas de veces en redes sociales desde el 19 de mayo de 2021 afirman que la\u003Cspan class='patron' style='--n:500; --cursor: blue; --font: rgb(0,0,153);'\u003E vacuna contra el covid-19 producida por la empresa Moderna contiene SM-102, una sustancia que supuestamente provoca c\u00e1ncer\u003C/span\u003E y no es apta para su uso en humanos\u003C/span\u003E. Sin embargo, el documento utilizado como \u201c evidencia \u201d de eso, refiere a la mezcla de SM-102 con cloroformo, un elemento t\u00f3xico que no figura en la lista de componentes del inmunizante. \u003Cbr\u003E\u003Cbr\u003E\n\n   \u201c \u00a1 Horrible bomba ! Connecticut advierte que la VACUNA Moderna contiene veneno mortal. Una hoja informativa que muestra los ingredientes de la vacuna COVID-19 muestra que la \u2018 inyecci\u00f3n \u2019 Moderna contiene SM-102 \u201d, dice una de las publicaciones en Facebook ( 1, 2 ) que comparten la noticia. \u003Cbr\u003E\u003Cbr\u003E\n\n   Las entradas toman como referencia \u201c una hoja de datos de seguridad de Cayman Chemicals sobre SM-102, publicada en abril de 2021 \u201d, la cual asegura que \u201c la sustancia es \u2018 solo para investigaci\u00f3n, no para uso humano o veterinario \u2019 \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   Las publicaciones agregan que ese documento enumera como posibles riesgos para la salud, por el uso de la sustancia, el c\u00e1ncer, la infertilidad, y da\u00f1os en los ri\u00f1ones, el h\u00edgado y el sistema nervioso central. \u003Cbr\u003E\u003Cbr\u003E\n\n   \u201c Se dice que el ingrediente de la vacuna es \u2018 fatal en contacto con la piel \u2019 y \u2018 t\u00f3xico para la vida acu\u00e1tica con efectos duraderos \u2019 \u201d, puntualizan. \u003Cbr\u003E\u003Cbr\u003E\n\n   Mensajes similares tambi\u00e9n han sido compartidos en sitios web ( 1, 2, 3 ) y en videos ( 1, 2 ), as\u00ed como en ingl\u00e9s y portugu\u00e9s. \u003Cbr\u003E\u003Cbr\u003E\n\n     Captura de pantalla realizada el 29 de junio de 2021 de una publicaci\u00f3n en Facebook \u003Cbr\u003E\u003Cbr\u003E\n\n   En las versiones en video, que muestran la grabaci\u00f3n de una pantalla, se puede observar c\u00f3mo el narrador hace una b\u00fasqueda de los componentes de las vacunas contra el covid-19. Posteriormente, el usuario ingresa al sitio web de una empresa qu\u00edmica que proporciona detalles de un producto llamado SM-102, un l\u00edpido que se usa en combinaci\u00f3n con otras grasas para formar nanopart\u00edculas. \u003Cbr\u003E\u003Cbr\u003E\n\n   El SM-102 tambi\u00e9n aparece en la lista de componentes de la vacuna de Moderna. La funci\u00f3n de este elemento es proteger las fr\u00e1giles mol\u00e9culas de ARN mensajero ( ARNm ), la tecnolog\u00eda de \u00e1cido ribonucleico mensajero que se usa en las dosis para inmunizar, distribuyendolas en las c\u00e9lulas. \u003Cbr\u003E\u003Cbr\u003E\n\n   El mismo ingrediente aparece en un gr\u00e1fico titulado \u201c \u00bf Qu\u00e9 ingredientes tiene la vacuna contra el covid-19 ? \u201d, del Departamento de Salud P\u00fablica del estado de Connecticut en Estados Unidos, en el que no se menciona que sea t\u00f3xico, inseguro o no apto para el uso en humanos o animales. \u003Cbr\u003E\u003Cbr\u003E\n\n   \u00bf Qu\u00e9 circula ? \u003Cbr\u003E\u003Cbr\u003E\n\n   Las entradas y secuencias publicadas en redes sociales muestran una captura de pantalla de una hoja de datos de seguridad sobre el SM-102, con el logo de Cayman Chemical, una empresa de biotecnolog\u00eda con sede en Ann Arbor, Michigan, Estados Unidos, que especifica que la sustancia es \u201c s\u00f3lo para uso en investigaciones \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   Las advertencias de salud en ese documento son utilizadas por las publicaciones virales para sugerir que el SM-102 es \" sospechoso de causar c\u00e1ncer \" y \" sospechoso de afectar la fertilidad o al feto \", por lo tanto, sostienen, su uso en la vacuna contra el covid-19 es peligroso. \u003Cbr\u003E\u003Cbr\u003E\n\n   Sin embargo, Marco Antonio Stephano, experto .en tecnolog\u00eda bioqu\u00edmica-farmac\u00e9utica y profesor de la Universidad de Sao Paulo ( USP ) en Brasil, asegura que \u201c seg\u00fan la FDS ( Ficha de Datos de Seguridad ), el SM-102 no tiene ning\u00fan componente en igual o mayor concentraci\u00f3n que 0, 1% identificado como cancer\u00edgeno \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   \u201c El SM-102 muestra su toxicidad \u00fanicamente en efectos de irritaci\u00f3n de la piel, ojos y \u00f3rganos espec\u00edficos, como los pulmones, si se inhala.   Por tanto, el producto SM-102 se considera seguro en cuanto a su uso en la vacuna de Moderna, no siendo responsable de ninguna patolog\u00eda descrita \u201d en los posts virales, dijo Stephano. \u003Cbr\u003E\u003Cbr\u003E\n\n   El SM-102 de Cayman Chemical \u003Cbr\u003E\u003Cbr\u003E\n\n   Efectivamente, la hoja de datos de seguridad de Cayman Chemical que comparten las entradas virales contiene advertencias, exigidas por las agencias reguladoras, incluso sobre los riesgos de c\u00e1ncer e infertilidad. Esto se debe a que el SM-102 de la compa\u00f1\u00eda est\u00e1 mezclado, como se detalla en la segunda p\u00e1gina, con cloroformo, un solvente potencialmente cancer\u00edgeno que puede causar problemas en el sistema nervioso central. \u003Cbr\u003E\u003Cbr\u003E\n\n     Captura de pantalla realizada el 30 de junio de 2021 del sitio web de Cayman Chemical \u003Cbr\u003E\u003Cbr\u003E\n\n   Cayman Chemical asegur\u00f3 al equipo de verificaci\u00f3n de la AFP que, despu\u00e9s de que el contenido se hiciera viral, emiti\u00f3 un comunicado el 19 de mayo de 2021 explicando que el SM-102 se encuentra entre los productos que fabrica \u201c para uso exclusivo en investigaci\u00f3n \u201d y que estos \u201c est\u00e1n destinados a pruebas in vitro o solo para uso animal ( exploratorio o precl\u00ednico ) \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   La compa\u00f1\u00eda agreg\u00f3 que los \u201c productos qu\u00edmicos con el mismo nombre pueden tener diferentes designaciones, [ dependiendo del ] grado o formulaci\u00f3n que se definen por sus protocolos de fabricaci\u00f3n y uso previsto \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n     Captura de pantalla realizada el 30 de junio de 2021 del comunicado de Cayman Chemical \u003Cbr\u003E\u003Cbr\u003E\n\n   El comunicado enfatiza que \u201c ni el Instituto Nacional de Seguridad y Salud Ocupacional ( NIOSH ), el Registro de Efectos T\u00f3xicos de Sustancias Qu\u00edmicas ( RTECS ), ni el Inventario de Clasificaci\u00f3n y Etiquetado de la Agencia Europea de Sustancias Qu\u00edmicas ( ECHA ) enumeran los peligros asociados al SM-102 \". \u003Cbr\u003E\u003Cbr\u003E\n\n   El documento de Cayman Chemical compartido en las entradas virales fue revisado el 26 de mayo de 2021 y cambi\u00f3 el nombre comercial de la sustancia para especificar desde el principio que se refiere a una mezcla de SM-102 con cloroformo. En la primera versi\u00f3n de ese documento, ese detalle aparec\u00eda solo en la segunda p\u00e1gina, indicando : \u201c Componentes de la etiqueta que determinan peligro : Cloroformo \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   El cloroformo, que se encuentra en una mezcla con SM-102 de Cayman Chemical, es una sustancia que no figura como ingrediente de la vacuna de Moderna, de acuerdo con las agencias sanitarias reguladoras de Estados Unidos, Europa y Canad\u00e1. \u003Cbr\u003E\u003Cbr\u003E\n\n   Seg\u00fan Stephano, este tipo de mezcla es com\u00fan : \u201c Como el SM-102 es una formulaci\u00f3n lip\u00eddica sint\u00e9tica, se necesita un solvente org\u00e1nico para solubilizarlo, en este caso, cloroformo. Pero el cloroformo no se usa en la vacuna. Lo que se utiliza es el DMSO, que se usa mucho como disolvente en varios medicamentos \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   En la misma l\u00ednea, el bioqu\u00edmico Jean Chaudi\u00e8re dijo : \u201c El SM-102 no se mezcla sistem\u00e1ticamente con cloroformo \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   Adem\u00e1s de la producci\u00f3n de vacunas, Stephano indic\u00f3 que el SM-102 se puede utilizar para otros fines, como \u201c administraci\u00f3n de f\u00e1rmacos y terapia g\u00e9nica \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   El equipo de verificaci\u00f3n de la AFP consult\u00f3 a la empresa Moderna respecto a la composici\u00f3n de su vacuna, pero hasta la publicaci\u00f3n de esta nota no hubo respuesta. \u003Cbr\u003E\u003Cbr\u003E\n\n   La red de salud Nebraska Medicine explica que \u201c cuando se usa para fines distintos a los medicamentos, el SM-102 a veces se mezcla con cloroformo. Cuando se mezcla de esta forma, no se considera su consumo para las personas \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   La microbi\u00f3loga de la Universidad de York en Canad\u00e1, Dasantila Golemi-Kotra, afirm\u00f3 que las empresas est\u00e1n obligadas por ley \" a enumerar todas las sustancias que est\u00e1n presentes en niveles que pueden ser peligrosos para los seres humanos \". \u003Cbr\u003E\u003Cbr\u003E\n\n   Tambi\u00e9n especific\u00f3 que \u201c la hoja de datos de seguridad indica claramente ( para alguien que conozca y est\u00e9 dispuesto a aprender y leer dicha documentaci\u00f3n ) que el SM-102 [ de Cayman Chemical ] es una mezcla de dos qu\u00edmicos : el ingrediente activo, el l\u00edpido, y un disolvente, cloroformo \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   Golemi-Kotra apunt\u00f3 una secci\u00f3n adicional de la hoja de datos de seguridad que indica que, si bien el cloroformo figura en la parte de \" componentes peligrosos \", la mol\u00e9cula SM-102 no. \u003Cbr\u003E\u003Cbr\u003E\n\n     Captura de pantalla realizada el 30 de junio de la p\u00e1gina de Cayman Chemical \u003Cbr\u003E\u003Cbr\u003E\n\n   Otras tablas de seguridad presentes en el documento muestran tambi\u00e9n que el cloroformo, no el l\u00edpido SM-102, es el ingrediente objeto de las advertencias. \u003Cbr\u003E\u003Cbr\u003E\n\n     Captura de pantalla realizada el 30 de junio de 2021 de la web de Cayman Chemical \u003Cbr\u003E\u003Cbr\u003E\n\n   Raymond Tellier, experto en microbiolog\u00eda del Centro de Salud de la Universidad McGill en Canad\u00e1, confirm\u00f3 que \u201c una lectura cuidadosa de la Hoja de Datos de Seguridad del Material ( MSDS ) que est\u00e1 adjunta, muestra claramente que todas las advertencias contenidas se refieren al cloroformo \u201d. \u003Cbr\u003E\u003Cbr\u003E\n\n   AFP Factual ha verificado varias afirmaciones falsas y enga\u00f1osas sobre las diferentes vacunas contra el covid-19, las cuales pueden ser consultadas en este enlace. \u003Cbr\u003E\u003Cbr\u003E\n\n         AFP Francia \u003Cbr\u003E\u003Cbr\u003E\n\n           Todos los art\u00edculos \u003Cbr\u003E\u003Cbr\u003E\n\n         AFP Brasil \u003Cbr\u003E\u003Cbr\u003E\n\n           Todos los art\u00edculos \u003Cbr\u003E\u003Cbr\u003E\n\n         AFP Estados Unidos \u003Cbr\u003E\u003Cbr\u003E\n\n           Todos los art\u00edculos \u003Cbr\u003E\n         Traducci\u00f3n y adaptaci\u00f3n \u003Cbr\u003E\u003Cbr\u003E\n\n         AFP M\u00e9xico \u003Cbr\u003E\u003Cbr\u003E\n\n           Todos los art\u00edculos \u003Cbr\u003E\n     Covid-19 Vacunas \u003Cbr\u003E\n     Facebook Twitter Email \u003Cbr\u003E\u003Cbr\u003E\n\n     \u00bf Dudas sobre la veracidad de una informaci\u00f3n, una foto o un video ? \u003Cbr\u003E\u003Cbr\u003E\n\n     \u00a1 Env\u00edanos un mensaje ! \u003Cbr\u003E\u003Cbr\u003E\n\n     Para Iberoam\u00e9rica WhatsApp \u003Cbr\u003E\u003Cbr\u003E\n\n     Para Estados Unidos WhatsApp E-mail \u003Cbr\u003E\u003Cbr\u003E\n\n       S\u00edganos \u003Cbr\u003E\u003Cbr\u003E\n\n             * P\u00e1gina principal \u003Cbr\u003E\n             * Sobre la AFP \u003Cbr\u003E\n             * C\u00f3mo trabajamos \u003Cbr\u003E\n             * Pr\u00e1cticas editoriales y deontol\u00f3gicas \u003Cbr\u003E\n             * Conozca al equipo \u003Cbr\u003E\n             * Curso en l\u00ednea \u003Cbr\u003E\n             * Contacto \u003Cbr\u003E\n             * Correcciones \u003Cbr\u003E\n             * Ofertas para medios / empresas \u003Cbr\u003E\n             * Aviso legal \u003Cbr\u003E\n       Factual \u003Cbr\u003E\u003Cbr\u003E\n\n       Copyright AFP 2017-2024. Todos los derechos reservados. Los usuarios pueden acceder a este sitio, consultarlo y utilizar las opciones propuestas para compartir su contenido con fines personales. Cualquier otro uso, especialmente la reproducci\u00f3n, la comunicaci\u00f3n al p\u00fablico o la distribuci\u00f3n del contenido de este sitio, en su totalidad o en parte, para cualquier otro fin y / o por otros medios, sin un acuerdo espec\u00edfico firmado con la AFP, est\u00e1 estrictamente prohibido. Los elementos analizados en cada verificaci\u00f3n se presentan o se enlazan en tanto son necesarios para la correcta comprensi\u00f3n de dicha verificaci\u00f3n. La AFP no cuenta con derechos sobre los autores ni sobre los propietarios del copyright de estos contenidos de terceras partes, y declina toda responsabilidad respecto a los mismos. AFP y su logo son marcas registradas. \u003Cbr\u003E\u003Cbr\u003E\n\n         \u2713 \u003Cbr\u003E\n         Thanks for sharing ! \u003Cbr\u003E\n       AddToAny \u003Cbr\u003E\n       More \u2026 \u003Cbr\u003E\u003Cbr\u003E\n\n               Al hacer clic en \u201c Aceptar todas las cookies \u201d, usted acepta que las cookies se guarden en su dispositivo para mejorar la navegaci\u00f3n del sitio, analizar el uso del mismo, y colaborar con nuestros estudios para marketing. \u003Cbr\u003E\u003Cbr\u003E\n\n               Par\u00e1metros de las cookies Aceptar todas las cookies \u003Cbr\u003E\n         Continuar sin aceptar \u003Cbr\u003E\u003Cbr\u003E\n\n       Centro de preferencia de la privacidad \u003Cbr\u003E\u003Cbr\u003E\n\n         Cuando visita cualquier sitio web, el mismo podr\u00eda obtener o guardar informaci\u00f3n en su navegador, generalmente mediante el uso de cookies. Esta informaci\u00f3n puede ser acerca de usted, sus preferencias o su dispositivo, y se usa principalmente para que el sitio funcione seg\u00fan lo esperado. Por lo general, la informaci\u00f3n no lo identifica directamente, pero puede proporcionarle una experiencia web m\u00e1s personalizada. Ya que respetamos su derecho a la privacidad, usted puede escoger no permitirnos usar ciertas cookies. Haga clic en los encabezados de cada categor\u00eda para saber m\u00e1s y cambiar nuestras configuraciones predeterminadas. Sin embargo, el bloqueo de algunos tipos de cookies puede afectar su experiencia en el sitio y los servicios que podemos ofrecer. \u003Cbr\u003E\n         M\u00e1s informaci\u00f3n \u003Cbr\u003E\n       Permitirlas todas \u003Cbr\u003E\u003Cbr\u003E\n\n       Gestionar las preferencias de consentimiento \u003Cbr\u003E\u003Cbr\u003E\n\n           Cookies de rendimiento \u003Cbr\u003E\u003Cbr\u003E\n\n             Cookies de rendimiento \u003Cbr\u003E\u003Cbr\u003E\n\n           Estas cookies nos permiten contar las visitas y fuentes de circulaci\u00f3n para poder medir y mejorar el desempe\u00f1o de nuestro sitio. Nos ayudan a saber qu\u00e9 p\u00e1ginas son las m\u00e1s o menos populares, y ver cu\u00e1ntas personas visitan el sitio. Toda la informaci\u00f3n que recogen estas cookies es agregada y, por lo tanto, an\u00f3nima. Si no permite estas cookies no sabremos cu\u00e1ndo visit\u00f3 nuestro sitio, y por lo tanto no podremos saber cu\u00e1ndo lo visit\u00f3. \u003Cbr\u003E\u003Cbr\u003E\n\n             Ver detalles del proveedor\u200e \u003Cbr\u003E\u003Cbr\u003E\n\n           Cookies de funcionalidad \u003Cbr\u003E\u003Cbr\u003E\n\n             Cookies de funcionalidad \u003Cbr\u003E\u003Cbr\u003E\n\n           Estas cookies permiten que el sitio ofrezca una mejor funcionalidad y personalizaci\u00f3n. Pueden ser establecidas por nosotros o por terceras partes cuyos servicios hemos agregado a nuestras p\u00e1ginas. Si no permite estas cookies algunos de nuestros servicios no funcionar\u00e1n correctamente. \u003Cbr\u003E\u003Cbr\u003E\n\n             Ver detalles del proveedor\u200e \u003Cbr\u003E\u003Cbr\u003E\n\n           Cookies dirigidas \u003Cbr\u003E\u003Cbr\u003E\n\n             Cookies dirigidas \u003Cbr\u003E\u003Cbr\u003E\n\n           Estas cookies pueden estar en todo el sitio web, colocadas por nuestros socios publicitarios. Estos negocios pueden utilizarlas para crear un perfil de sus intereses y mostrarle anuncios relevantes en otros sitios. No almacenan informaci\u00f3n personal directamente, sino que se basan en la identificaci\u00f3n \u00fanica de su navegador y dispositivo de acceso al Internet. Si no permite estas cookies, tendr\u00e1 menos publicidad dirigida. \u003Cbr\u003E\u003Cbr\u003E\n\n             Ver detalles del proveedor\u200e \u003Cbr\u003E\u003Cbr\u003E\n\n         Performance Cookies \u003Cbr\u003E\u003Cbr\u003E\n\n           Clear \u003Cbr\u003E\n                   checkbox label label \u003Cbr\u003E\n               Apply Cancel \u003Cbr\u003E\n           Consent Leg .Interest \u003Cbr\u003E\n             checkbox label label \u003Cbr\u003E\n             checkbox label label \u003Cbr\u003E\n             checkbox label label \u003Cbr\u003E\u003Cbr\u003E\n\n             * View Cookies \u003Cbr\u003E\n                       + Name \u003Cbr\u003E\n                         cookie name \u003Cbr\u003E\n         Confirmar mis preferencias \u003Cbr\u003E\n", "url": "https://factual.afp.com/publicaciones-afirman-erroneamente-que-la-vacuna-de-moderna-contiene-una-sustancia-insegura", "cantidad_patrones": 1, "veredicto": "Confirmaci\u00f3n"}]</script>
+<script id="noticia_buscada" type="application/json">"La vacuna del covid-19 produce c\u00e1ncer"</script>
+
+<script type='text/javascript'>
+   const noticias = JSON.parse(document.getElementById('noticias').textContent);
+   var query = JSON.parse(document.getElementById('noticia_buscada').textContent);
+   console.log('NOTICIAS:', noticias);
+   console.log('QUERY:', query);
+
+   for (n of noticias)
+   {
+      $('#lista_noticias').append(
+      `
+      <div class="content-left-content" id="noticia${n.index}">
+         <div class="content-middle">
+            <div class="content-middle-data bg-blue" style="display: flex; flex-direction: row; justify-content: space-between;" id="header_noticia">
+               <div>
+                  <p id="noticia_title" style="font-weight: bolder; text-align: center; margin-bottom: 20px; color: rgb(30,67,126);">${n.title}</p>
+                  <p>
+                     URL:
+                     <a target="_blank" href="${n.url}"><span id="noticia_url" class="content-middle-data-item" style="color: rgb(92,92,92);">${n.url}</span></a>
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div id="noticia_body" class="body">${n.body}</div>
+      </div>
+      `);
+   }
+
+   setTimeout(() => {
+      $('#patron0')[0].scrollIntoView({behavior: 'smooth'});
+   }, 100);
+   
+   $('body').on('click', '#pdf', function(e)
+   {
+      let arr = [];
+      for (n of noticias)
+      {
+         let
+         obj = {
+            title: n.title,
+            url: n.url,
+            relevant: null
+         },
+         relevant = [],
+         y = $('<div></div>').html(n.body).find('span.relevante');
+         for (x of y)
+            relevant.push(x.innerHTML);
+         obj.relevant = relevant;
+         arr.push(obj);
+      }
+
+      let
+      win   = window.open('', '', 'height=400,width=800'),
+      html  = `
+         <!DOCTYPE html><html lang="en"><head><title>${query}</title>
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+         <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+	      <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;1,500&display=swap" rel="stylesheet">	
+         <style>
+            table,th,td{border:1px solid black; border-radius: 4px;}
+            body,a{font-family: 'Saira', sans-serif;}
+            td{padding-left: 15px; background-color: rgba(255,254,214,0);}
+            th{font-family: 'Ubuntu', sans-serif; background-color: rgb(242,248,255); color: rgb(40,40,60);}
+         </style>
+         </head>
+         <body><h2>${query}</h2><table>
+      `;
+      
+      for (i of arr)
+      {
+         html += `<tr><th>${i.title}<br/><a href="${i.url}">${i.url}</a></th></tr><tr><td>`;
+         for (let j = 0; j < i.relevant.length; ++j)
+         {
+            html += `${i.relevant[j]}<br/>`;
+            if (j < i.relevant.length - 1)
+               html += `<br/>`;
+         }
+         html += `</td></tr>`;
+      }
+      html += `</table></body></html>`;
+      win.document.write(html);
+
+      win.document.close();
+      win.print();
+   });
+
+   $('body').on('click', '#noticia_url', function(e)
+   {
+      console.log('Click link');
+      e.preventDefault();
+      window.open($('#noticia_url').prop('href'), "_blank");
+   });
+
+   $('body').on('click', '.dropdown-item', function()
+   {
+      $('#noticia'+$(this).attr('data-index'))[0].scrollIntoView({behavior: 'smooth'});
+   });
+</script>
+
+
+
+</body>
+</html>

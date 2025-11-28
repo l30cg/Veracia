@@ -1,0 +1,175 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block title %}
+   Noticias populares
+{% endblock %}
+
+{% block content %}
+
+<div id="noticia_completa_wrapper">
+   <div id="noticia_completa">
+      <div
+      id="img_fondo"
+      style="width: 100%; height: 230px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-image: linear-gradient(rgba(32,33,36,0) 36%,rgba(32,33,36,0.665)), url('https://statics-diariomedico.uecdn.es/cms/styles/landscape_xl/azblob/2020-04/liquor-2687103_1280.jpg.webp?itok=Q7FK-lrX');
+      display: flex;
+      align-items: flex-end;
+      ">
+
+      <div id="btn_cerrar_noticia" style="position: absolute; right: 10px; bottom: 10px; color: white; font-weight: bolder;">Cerrar</div>
+   
+      <span id="titulo_noticia" style="color: white;
+      font-family: \'Figtree\', sans-serif;
+      font-weight: 500;
+      font-size: 32px;
+      margin-left: 20px;
+      margin-bottom: 20px;
+      ">Hola</span>
+      </div>
+
+      <p id="cuerpo_noticia" style="color: black; font-size: large; align-self: center; padding-left: 30px; padding-right: 30px;"></p>
+   </div>
+
+   
+</div>
+
+
+   <div class="container-content">
+      <div class="container-analyzer">
+         <div class="analyzer-cards">
+
+            <div class="analyzer-card" id="noticia_pop1">
+               <div class="analyzer-card-image">
+                  <img src="https://statics-diariomedico.uecdn.es/cms/styles/landscape_xl/azblob/2020-04/liquor-2687103_1280.jpg.webp?itok=Q7FK-lrX" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Tomar alcohol mata el coronavirus</span>
+                  <p>Pandemia COVID-19</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop2">
+               <div class="analyzer-card-image">
+                  <img src="{% static 'img/sia.webp' %}" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">El sida se contagia tocando una persona infectada</span>
+                  <p>VIH sida</p>
+               </div>
+            </div>
+            
+            <div class="analyzer-card" id="noticia_pop3">
+               <div class="analyzer-card-image">
+                  <img src="{% static 'img/rastrillo.webp' %}" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">¿Es posible contagiarse de VIH al compartir un rastrillo?</span>
+                  <p>VIH sida</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop4">
+               <div class="analyzer-card-image">
+                  <img src="{% static 'img/uñas.webp' %}" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Usar uñas postizas provoca cáncer</span>
+                  <p>Cosmética, estilo de vida</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop5">
+               <div class="analyzer-card-image">
+                  <img src="https://saude.abril.com.br/wp-content/uploads/2019/08/cancer01.jpg?quality=85&strip=info" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Cáncer es deficiencia de vitamina b17</span>
+                  <p>Nutrición, oncología</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop6">
+               <div class="analyzer-card-image">
+                  <img src="https://autismo.org.es/wp-content/uploads/2017/06/vacunas2-620x349.jpg" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Las vacunas causan autismo</span>
+                  <p>Prevención, vacunas</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop7">
+               <div class="analyzer-card-image">
+                  <img src="https://cdn.businessinsider.es/sites/navi.axelspringer.es/public/media/image/2018/08/nudillos-manos.jpg?tf=3840x" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Hacer crujir los nudillos causa artritis</span>
+                  <p>Mitos, articulaciones</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop8">
+               <div class="analyzer-card-image">
+                  <img src="https://www.vista-laser.com/wp-content/uploads/2018/07/television-afecta-vista.png.webp" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Sentarse demasiado cerca de la TV empeora la vista</span>
+                  <p>Vista, miopía</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop9">
+               <div class="analyzer-card-image">
+                  <img src="https://images.ecestaticos.com/_upQZDsgzax-91XV3I4VM_7rPJ8=/155x100:1868x1383/557x418/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2F951%2F4fd%2Fc02%2F9514fdc028c4bedd5ce1976ffdc1701a.jpg" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">El jugo de arándano cura las infecciones del tracto urinario</span>
+                  <p>Remedios, mitos</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop10">
+               <div class="analyzer-card-image">
+                  <img src="https://www.clikisalud.net/wp-content/uploads/2018/07/nadar.jpg" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Después de comer, debes esperar una hora antes de nadar</span>
+                  <p>Digestión, creencias</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop11">
+               <div class="analyzer-card-image">
+                  <img src="https://hips.hearstapps.com/hmg-prod/images/man-touching-knee-in-pain-on-road-royalty-free-image-1595411648.jpg?crop=1.00xw:0.753xh;0,0&resize=2048:*" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">Correr perjudica las rodillas</span>
+                  <p>Ejercicio, Estilo de vida</p>
+               </div>
+            </div>
+
+            <div class="analyzer-card" id="noticia_pop12">
+               <div class="analyzer-card-image">
+                  <img src="https://www.ocu.org/-/media/ocu/images/home/salud/bienestar/mitos_frio_600.jpg?rev=364ac60a-86f4-42b4-9cc2-b70e41fa3641&hash=979402DED043FA8CF441179281F16072&mw=960" style="object-fit: cover;">
+               </div>
+               <div class="analyzer-card-content">
+                  <span class="title">El aire frío causa resfriados</span>
+                  <p>Clima, Sistema respiratorio</p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
